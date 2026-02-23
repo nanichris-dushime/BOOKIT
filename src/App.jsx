@@ -1,9 +1,11 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import { ThemeProvider } from './contexts/ThemeContext'
+import { AuthProvider } from './context/AuthContext'
 import { MainLayout } from './layouts/MainLayout'
 import { DashboardLayout } from './layouts/DashboardLayout'
 import { PageWrapper } from './components/PageWrapper'
+import { ProtectedRoute } from './components/ProtectedRoute'
 import { HomePage } from './pages/HomePage'
 import { SearchResultsPage } from './pages/SearchResultsPage'
 import { SeatSelectionPage } from './pages/SeatSelectionPage'
@@ -23,20 +25,99 @@ function AnimatedRoutes() {
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route element={<MainLayout />}>
-          <Route path="/" element={<PageWrapper><HomePage /></PageWrapper>} />
-          <Route path="/search" element={<PageWrapper><SearchResultsPage /></PageWrapper>} />
-          <Route path="/seats" element={<PageWrapper><SeatSelectionPage /></PageWrapper>} />
-          <Route path="/booking" element={<PageWrapper><Booking /></PageWrapper>} />
-          <Route path="/booking/summary" element={<PageWrapper><BookingSummaryPage /></PageWrapper>} />
-          <Route path="/ticket" element={<PageWrapper><DigitalTicketPage /></PageWrapper>} />
-          <Route path="/tickets" element={<PageWrapper><TicketsPage /></PageWrapper>} />
+          <Route
+            path="/"
+            element={(
+              <PageWrapper>
+                <HomePage />
+              </PageWrapper>
+            )}
+          />
+          <Route
+            path="/search"
+            element={(
+              <PageWrapper>
+                <SearchResultsPage />
+              </PageWrapper>
+            )}
+          />
+          <Route
+            path="/seats"
+            element={(
+              <PageWrapper>
+                <SeatSelectionPage />
+              </PageWrapper>
+            )}
+          />
+          <Route
+            path="/booking"
+            element={(
+              <PageWrapper>
+                <Booking />
+              </PageWrapper>
+            )}
+          />
+          <Route
+            path="/booking/summary"
+            element={(
+              <PageWrapper>
+                <BookingSummaryPage />
+              </PageWrapper>
+            )}
+          />
+          <Route
+            path="/ticket"
+            element={(
+              <PageWrapper>
+                <DigitalTicketPage />
+              </PageWrapper>
+            )}
+          />
+          <Route
+            path="/tickets"
+            element={(
+              <PageWrapper>
+                <TicketsPage />
+              </PageWrapper>
+            )}
+          />
         </Route>
         <Route element={<DashboardLayout />}>
-          <Route path="/admin" element={<PageWrapper><AdminDashboardPage /></PageWrapper>} />
-          <Route path="/admin/buses" element={<PageWrapper><AdminBusesPage /></PageWrapper>} />
-          <Route path="/admin/analytics" element={<PageWrapper><AdminAnalyticsPage /></PageWrapper>} />
+          <Route
+            path="/admin"
+            element={(
+              <PageWrapper>
+                <AdminDashboardPage />
+              </PageWrapper>
+            )}
+          />
+          <Route
+            path="/admin/buses"
+            element={(
+              <PageWrapper>
+                <AdminBusesPage />
+              </PageWrapper>
+            )}
+          />
+          <Route
+            path="/admin/analytics"
+            element={(
+              <PageWrapper>
+                <AdminAnalyticsPage />
+              </PageWrapper>
+            )}
+          />
         </Route>
-        <Route path="/only-admin" element={<PageWrapper><AdminOnly /></PageWrapper>} />
+        <Route
+          path="/only-admin"
+          element={(
+            <ProtectedRoute role="admin">
+              <PageWrapper>
+                <AdminOnly />
+              </PageWrapper>
+            </ProtectedRoute>
+          )}
+        />
       </Routes>
     </AnimatePresence>
   )
@@ -45,9 +126,11 @@ function AnimatedRoutes() {
 function App() {
   return (
     <ThemeProvider>
-      <BrowserRouter>
-        <AnimatedRoutes />
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <AnimatedRoutes />
+        </BrowserRouter>
+      </AuthProvider>
     </ThemeProvider>
   )
 }
