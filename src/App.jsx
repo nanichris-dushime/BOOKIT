@@ -2,16 +2,18 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { AuthProvider } from './context/AuthContext'
+import { PaymentProvider } from './context/PaymentContext'
 import { MainLayout } from './layouts/MainLayout'
 import { DashboardLayout } from './layouts/DashboardLayout'
 import { PageWrapper } from './components/PageWrapper'
 import { ProtectedRoute } from './components/ProtectedRoute'
+import { PaidRoute } from './components/PaidRoute'
 import { HomePage } from './pages/HomePage'
 import { SearchResultsPage } from './pages/SearchResultsPage'
 import { SeatSelectionPage } from './pages/SeatSelectionPage'
 import { Booking } from './pages/Booking'
 import { BookingSummaryPage } from './pages/BookingSummaryPage'
-import { DigitalTicketPage } from './pages/DigitalTicketPage'
+import { TicketConfirmation } from './pages/TicketConfirmation'
 import { TicketsPage } from './pages/TicketsPage'
 import { AdminDashboardPage } from './pages/AdminDashboardPage'
 import { AdminBusesPage } from './pages/AdminBusesPage'
@@ -68,9 +70,11 @@ function AnimatedRoutes() {
           <Route
             path="/ticket"
             element={(
-              <PageWrapper>
-                <DigitalTicketPage />
-              </PageWrapper>
+              <PaidRoute>
+                <PageWrapper>
+                  <TicketConfirmation />
+                </PageWrapper>
+              </PaidRoute>
             )}
           />
           <Route
@@ -82,7 +86,13 @@ function AnimatedRoutes() {
             )}
           />
         </Route>
-        <Route element={<DashboardLayout />}>
+        <Route
+          element={(
+            <ProtectedRoute role="admin">
+              <DashboardLayout />
+            </ProtectedRoute>
+          )}
+        >
           <Route
             path="/admin"
             element={(
@@ -127,9 +137,11 @@ function App() {
   return (
     <ThemeProvider>
       <AuthProvider>
-        <BrowserRouter>
-          <AnimatedRoutes />
-        </BrowserRouter>
+        <PaymentProvider>
+          <BrowserRouter>
+            <AnimatedRoutes />
+          </BrowserRouter>
+        </PaymentProvider>
       </AuthProvider>
     </ThemeProvider>
   )

@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Bus, Menu, X, Sun, Moon } from 'lucide-react'
 import { useTheme } from '../contexts/ThemeContext'
-import { useAuth } from '../context/AuthContext'
 
 const navItems = [
   { to: '/', label: 'Home' },
@@ -14,8 +13,6 @@ const springButton = { type: 'spring', stiffness: 300, damping: 20 }
 
 export function Navbar() {
   const { isDark, toggle } = useTheme()
-  const { isAuthenticated, logout } = useAuth()
-  const navigate = useNavigate()
   const { pathname } = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
@@ -31,12 +28,6 @@ export function Navbar() {
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [pathname])
-
-  const handleLogout = () => {
-    logout()
-    setMobileOpen(false)
-    navigate('/', { replace: true })
-  }
 
   const navClasses = transparent
     ? 'bg-transparent text-white'
@@ -81,17 +72,6 @@ export function Navbar() {
                 />
               </Link>
             ))}
-            {isAuthenticated ? (
-              <motion.button
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                transition={springButton}
-                onClick={handleLogout}
-                className="px-4 py-2 rounded-xl bg-[#0F7B5F] hover:bg-[#0c644f] text-white text-sm font-semibold transition-colors"
-              >
-                Logout
-              </motion.button>
-            ) : null}
           </div>
 
           <div className="flex items-center gap-2 md:hidden">
@@ -146,15 +126,6 @@ export function Navbar() {
                   {item.label}
                 </Link>
               ))}
-              {isAuthenticated ? (
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="block py-2 font-semibold text-[#0F7B5F] dark:text-emerald-400"
-                >
-                  Logout
-                </button>
-              ) : null}
             </div>
           </motion.div>
         )}

@@ -10,7 +10,7 @@ export function ProtectedRoute({ children, role }) {
   }
 
   if (role && userRole !== role) {
-    return <Navigate to="/" replace />
+    return <Login />
   }
 
   return children
