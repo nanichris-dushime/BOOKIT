@@ -31,7 +31,7 @@ export function SeatSelectionPage() {
       seats: selectedSeats.join(','),
       total: (selectedSeats.length * price).toString(),
     })
-    navigate(`/booking?${params.toString()}`)
+    navigate(`/booking/summary?${params.toString()}`)
   }
 
   return (

@@ -9,7 +9,7 @@ const navItems = [
   { path: '/admin/analytics', icon: BarChart3, label: 'Analytics' },
 ]
 
-export function DashboardLayout() {
+export function DashboardLayout({ children = null }) {
   const location = useLocation()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
@@ -81,7 +81,7 @@ export function DashboardLayout() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <Outlet />
+            {children || <Outlet />}
           </motion.div>
         </main>
       </div>

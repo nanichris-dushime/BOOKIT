@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { SearchBar } from '../components/SearchBar'
+import { useNavigate } from 'react-router-dom'
 import { StatCard } from '../components/StatCard'
 import { FEATURED_BUS_COMPANIES } from '../utils/constants'
 
@@ -10,6 +10,8 @@ const STATS = [
 ]
 
 export function HomePage() {
+  const navigate = useNavigate()
+
   return (
     <>
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
@@ -42,7 +44,14 @@ export function HomePage() {
             <p className="text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto mb-10">
               Book inter-province bus tickets in Rwanda. Skip the queues. Travel smart.
             </p>
-            <SearchBar compact={false} />
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => navigate('/booking')}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-2xl shadow-lg text-lg font-semibold transition-all duration-300"
+            >
+              Proceed to Booking
+            </motion.button>
           </motion.div>
         </div>
       </section>

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Bus, Menu, X, Sun, Moon } from 'lucide-react'
@@ -8,18 +8,38 @@ export function Navbar() {
   const { isDark, toggle } = useTheme()
   const { pathname } = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
-  const transparent = pathname === '/'
+  const [isScrolled, setIsScrolled] = useState(false)
+  const isHome = pathname === '/'
+  const transparent = isHome && !isScrolled
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 80)
+    }
+
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [pathname])
+
+  const navClasses = transparent
+    ? 'bg-transparent text-white'
+    : 'bg-white dark:bg-slate-900 shadow-md text-slate-900 dark:text-slate-100'
+
+  const iconButtonClasses = transparent
+    ? 'p-2 rounded-lg hover:bg-white/10 transition-all duration-300'
+    : 'p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-all duration-300'
+
+  const mobilePanelClasses = transparent
+    ? 'md:hidden border-t border-white/20 bg-slate-900/95 text-white backdrop-blur-sm'
+    : 'md:hidden border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100'
 
   return (
     <motion.nav
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
-        transparent
-          ? 'bg-transparent text-white'
-          : 'bg-white dark:bg-slate-900 shadow-sm text-slate-800 dark:text-slate-100'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${navClasses}`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
@@ -43,26 +63,20 @@ export function Navbar() {
             >
               My Tickets
             </Link>
-            <Link
-              to="/admin"
-              className="text-sm font-medium hover:opacity-80 transition-opacity"
-            >
-              Admin
-            </Link>
           </div>
 
           <div className="flex items-center gap-2">
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={toggle}
-              className="p-2 rounded-lg hover:bg-white/10 transition-colors"
+              className={iconButtonClasses}
               aria-label="Toggle dark mode"
             >
               {isDark ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
             </motion.button>
             <button
               onClick={() => setMobileOpen((o) => !o)}
-              className="md:hidden p-2 rounded-lg hover:bg-white/10 transition-colors"
+              className={`md:hidden ${iconButtonClasses}`}
               aria-label="Menu"
             >
               {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -77,7 +91,7 @@ export function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-white/20 dark:border-slate-700 bg-slate-900 dark:bg-slate-900"
+            className={mobilePanelClasses}
           >
             <div className="px-4 py-3 space-y-2">
               <Link
@@ -93,13 +107,6 @@ export function Navbar() {
                 onClick={() => setMobileOpen(false)}
               >
                 My Tickets
-              </Link>
-              <Link
-                to="/admin"
-                className="block py-2 font-medium"
-                onClick={() => setMobileOpen(false)}
-              >
-                Admin
               </Link>
             </div>
           </motion.div>
