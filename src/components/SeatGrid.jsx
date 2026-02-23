@@ -33,11 +33,7 @@ export function SeatGrid({ totalSeats = 32, occupiedSeats = [], pricePerSeat, on
       <div className="max-w-xs mx-auto">
         <div className="grid grid-cols-4 gap-3">
           {seats.map((seat) => (
-            <SeatButton
-              key={seat.num}
-              seat={seat}
-              onClick={() => toggleSeat(seat.num)}
-            />
+            <SeatButton key={seat.num} seat={seat} onClick={() => toggleSeat(seat.num)} />
           ))}
         </div>
       </div>
@@ -49,12 +45,8 @@ export function SeatGrid({ totalSeats = 32, occupiedSeats = [], pricePerSeat, on
       >
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <p className="text-sm text-slate-600 dark:text-slate-400">
-              {selected.length} seat(s) selected
-            </p>
-            <p className="text-xl font-bold text-[#0F7B5F] dark:text-emerald-400">
-              {total.toLocaleString()} RWF
-            </p>
+            <p className="text-sm text-slate-600 dark:text-slate-400">{selected.length} seat(s) selected</p>
+            <p className="text-xl font-bold text-[#0F7B5F] dark:text-emerald-400">{total.toLocaleString()} RWF</p>
           </div>
           <div className="flex flex-wrap gap-4 text-sm">
             <span className="flex items-center gap-1.5">
@@ -78,10 +70,10 @@ export function SeatGrid({ totalSeats = 32, occupiedSeats = [], pricePerSeat, on
 
 function SeatButton({ seat, onClick }) {
   const getStyles = () => {
-    if (seat.isOccupied)
-      return 'bg-slate-400 dark:bg-slate-600 cursor-not-allowed opacity-70'
-    if (seat.isSelected)
+    if (seat.isOccupied) return 'bg-slate-400 dark:bg-slate-600 cursor-not-allowed opacity-70'
+    if (seat.isSelected) {
       return 'bg-[#0F7B5F] text-white cursor-pointer ring-2 ring-[#0F7B5F] ring-offset-2 dark:ring-offset-slate-900'
+    }
     return 'bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 cursor-pointer'
   }
 
@@ -90,9 +82,15 @@ function SeatButton({ seat, onClick }) {
       type="button"
       onClick={onClick}
       disabled={seat.isOccupied}
-      whileHover={!seat.isOccupied ? { scale: 1.05 } : {}}
-      whileTap={!seat.isOccupied ? { scale: 0.95 } : {}}
-      className={`w-10 h-10 rounded-lg font-medium text-sm transition-colors ${getStyles()}`}
+      animate={
+        !seat.isOccupied && seat.isSelected
+          ? { scale: [1, 1.1, 1] }
+          : { scale: 1 }
+      }
+      transition={{ duration: 0.25, ease: 'easeInOut' }}
+      whileHover={!seat.isOccupied ? { scale: 1.03 } : {}}
+      whileTap={!seat.isOccupied ? { scale: 0.97 } : {}}
+      className={`w-10 h-10 rounded-lg font-medium text-sm transition-colors duration-300 ${getStyles()}`}
       aria-label={`Seat ${seat.num}`}
     >
       {seat.num}

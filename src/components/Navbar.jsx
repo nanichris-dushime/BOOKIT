@@ -4,6 +4,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Bus, Menu, X, Sun, Moon } from 'lucide-react'
 import { useTheme } from '../contexts/ThemeContext'
 
+const navItems = [
+  { to: '/', label: 'Home' },
+  { to: '/tickets', label: 'My Tickets' },
+]
+
+const springButton = { type: 'spring', stiffness: 300, damping: 20 }
+
 export function Navbar() {
   const { isDark, toggle } = useTheme()
   const { pathname } = useLocation()
@@ -24,7 +31,7 @@ export function Navbar() {
 
   const navClasses = transparent
     ? 'bg-transparent text-white'
-    : 'bg-white dark:bg-slate-900 shadow-md text-slate-900 dark:text-slate-100'
+    : 'bg-white/95 dark:bg-slate-900/95 backdrop-blur-md shadow-md text-slate-900 dark:text-slate-100'
 
   const iconButtonClasses = transparent
     ? 'p-2 rounded-lg hover:bg-white/10 transition-all duration-300'
@@ -51,23 +58,26 @@ export function Navbar() {
           </Link>
 
           <div className="hidden md:flex items-center gap-8">
-            <Link
-              to="/"
-              className="text-sm font-medium hover:opacity-80 transition-opacity"
-            >
-              Home
-            </Link>
-            <Link
-              to="/tickets"
-              className="text-sm font-medium hover:opacity-80 transition-opacity"
-            >
-              My Tickets
-            </Link>
+            {navItems.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                className="group relative text-sm font-medium hover:opacity-90 transition-all duration-300"
+              >
+                {item.label}
+                <span
+                  className={`absolute -bottom-1 left-0 h-0.5 w-full origin-left scale-x-0 rounded-full transition-transform duration-300 group-hover:scale-x-100 ${
+                    transparent ? 'bg-white' : 'bg-[#0F7B5F]'
+                  }`}
+                />
+              </Link>
+            ))}
           </div>
 
           <div className="flex items-center gap-2">
             <motion.button
               whileTap={{ scale: 0.95 }}
+              transition={springButton}
               onClick={toggle}
               className={iconButtonClasses}
               aria-label="Toggle dark mode"
@@ -94,20 +104,16 @@ export function Navbar() {
             className={mobilePanelClasses}
           >
             <div className="px-4 py-3 space-y-2">
-              <Link
-                to="/"
-                className="block py-2 font-medium"
-                onClick={() => setMobileOpen(false)}
-              >
-                Home
-              </Link>
-              <Link
-                to="/tickets"
-                className="block py-2 font-medium"
-                onClick={() => setMobileOpen(false)}
-              >
-                My Tickets
-              </Link>
+              {navItems.map((item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className="block py-2 font-medium"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              ))}
             </div>
           </motion.div>
         )}

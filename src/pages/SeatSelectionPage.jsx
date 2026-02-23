@@ -4,6 +4,8 @@ import { motion } from 'framer-motion'
 import { SeatGrid } from '../components/SeatGrid'
 import { ArrowLeft } from 'lucide-react'
 
+const springButton = { type: 'spring', stiffness: 300, damping: 20 }
+
 export function SeatSelectionPage() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
@@ -68,8 +70,9 @@ export function SeatSelectionPage() {
 
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-8 flex justify-end">
         <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          whileHover={{ scale: selectedSeats.length > 0 ? 1.03 : 1 }}
+          whileTap={{ scale: selectedSeats.length > 0 ? 0.97 : 1 }}
+          transition={springButton}
           onClick={handleContinue}
           disabled={selectedSeats.length === 0}
           className={`px-8 py-3 rounded-xl font-semibold transition-all ${

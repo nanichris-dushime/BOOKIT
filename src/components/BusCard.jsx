@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Clock, Users, ChevronRight } from 'lucide-react'
 
+const springButton = { type: 'spring', stiffness: 300, damping: 20 }
+
 export function BusCard({ bus, from, to, date, index = 0 }) {
   const searchParams = new URLSearchParams({
     busId: bus.id,
@@ -18,9 +20,9 @@ export function BusCard({ bus, from, to, date, index = 0 }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05 }}
-      whileHover={{ y: -2 }}
-      className="relative bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-[0_10px_15px_-3px_rgba(0,0,0,0.08),0_4px_6px_-4px_rgba(0,0,0,0.05)] hover:shadow-xl transition-shadow border border-slate-100 dark:border-slate-700"
+      transition={{ delay: index * 0.05, duration: 0.25 }}
+      whileHover={{ y: -6 }}
+      className="relative bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-[0_10px_15px_-3px_rgba(0,0,0,0.08),0_4px_6px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_20px_30px_-12px_rgba(15,123,95,0.32)] transition-shadow duration-[250ms] border border-slate-100 dark:border-slate-700"
     >
       <span className="absolute top-4 right-4 flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400 font-medium">
         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
@@ -32,9 +34,7 @@ export function BusCard({ bus, from, to, date, index = 0 }) {
             🚌
           </div>
           <div>
-            <h3 className="font-semibold text-slate-800 dark:text-slate-100 text-lg">
-              {bus.company}
-            </h3>
+            <h3 className="font-semibold text-slate-800 dark:text-slate-100 text-lg">{bus.company}</h3>
             <div className="flex items-center gap-4 mt-1 text-sm text-slate-500 dark:text-slate-400">
               <span className="flex items-center gap-1">
                 <Clock className="w-4 h-4" />
@@ -56,8 +56,9 @@ export function BusCard({ bus, from, to, date, index = 0 }) {
           </div>
           <Link to={`/seats?${searchParams.toString()}`}>
             <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              transition={springButton}
               className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#0F7B5F] hover:bg-[#0a5a45] text-white font-semibold transition-colors"
             >
               Select Seat

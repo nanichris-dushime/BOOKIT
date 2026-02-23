@@ -9,44 +9,67 @@ const STATS = [
   { value: '5', label: 'Provinces Covered' },
 ]
 
+const heroContainer = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.1,
+    },
+  },
+}
+
+const heroItem = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
+}
+
+const springButton = { type: 'spring', stiffness: 300, damping: 20 }
+
 export function HomePage() {
   const navigate = useNavigate()
 
   return (
     <>
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
-        <div
+        <motion.div
+          initial={{ scale: 1 }}
+          animate={{ scale: 1.05 }}
+          transition={{ duration: 1.8, ease: 'easeOut' }}
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: `url(https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=2069)`,
           }}
         >
           <div className="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-slate-900/60 to-slate-900/90" />
-        </div>
+        </motion.div>
 
         <div className="relative z-10 w-full max-w-5xl px-4 py-20 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
+          <motion.div variants={heroContainer} initial="hidden" animate="show">
             <motion.span
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3 }}
+              variants={heroItem}
               className="inline-block px-4 py-1.5 rounded-full bg-[#0F7B5F] text-white text-sm font-medium mb-6"
             >
               1% smarter travel
             </motion.span>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4 leading-tight">
+            <motion.h1
+              variants={heroItem}
+              className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4 leading-tight"
+            >
               Travel Across Rwanda, The Smart Way
-            </h1>
-            <p className="text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto mb-10">
+            </motion.h1>
+            <motion.p
+              variants={heroItem}
+              className="text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto mb-10"
+            >
               Book inter-province bus tickets in Rwanda. Skip the queues. Travel smart.
-            </p>
+            </motion.p>
             <motion.button
+              variants={heroItem}
               whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
+              whileTap={{ scale: 0.97 }}
+              transition={springButton}
               onClick={() => navigate('/booking')}
               className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-4 rounded-2xl shadow-lg text-lg font-semibold transition-all duration-300"
             >
@@ -60,12 +83,7 @@ export function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {STATS.map((stat, i) => (
-              <StatCard
-                key={stat.label}
-                value={stat.value}
-                label={stat.label}
-                index={i}
-              />
+              <StatCard key={stat.label} value={stat.value} label={stat.label} index={i} />
             ))}
           </div>
         </div>
@@ -88,9 +106,9 @@ export function HomePage() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                whileHover={{ y: -4 }}
-                className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-[0_10px_15px_-3px_rgba(0,0,0,0.08)] hover:shadow-xl transition-shadow"
+                transition={{ delay: i * 0.1, duration: 0.25 }}
+                whileHover={{ y: -6 }}
+                className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-[0_10px_15px_-3px_rgba(0,0,0,0.08)] hover:shadow-[0_20px_30px_-12px_rgba(15,123,95,0.32)] transition-shadow duration-[250ms]"
               >
                 <div className="text-4xl mb-3">{company.logo}</div>
                 <h3 className="font-semibold text-lg text-slate-800 dark:text-slate-100">

@@ -26,3 +26,13 @@ body {
   min-width: 320px;
   min-height: 100vh;
 }
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.6s infinite;
+}

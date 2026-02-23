@@ -10,6 +10,8 @@ const PAYMENT_OPTIONS = [
   { id: 'visa', label: 'Visa', icon: CreditCard },
 ]
 
+const springButton = { type: 'spring', stiffness: 300, damping: 20 }
+
 export function BookingSummaryPage() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
@@ -70,8 +72,7 @@ export function BookingSummaryPage() {
               <strong className="text-slate-800 dark:text-slate-100">Bus:</strong> {company}
             </p>
             <p>
-              <strong className="text-slate-800 dark:text-slate-100">Time:</strong> {departure} -{' '}
-              {arrival}
+              <strong className="text-slate-800 dark:text-slate-100">Time:</strong> {departure} - {arrival}
             </p>
             <p>
               <strong className="text-slate-800 dark:text-slate-100">Seats:</strong> {seats.join(', ')}
@@ -91,9 +92,7 @@ export function BookingSummaryPage() {
         >
           <h3 className="font-semibold text-slate-800 dark:text-slate-100">Passenger Details</h3>
           <div>
-            <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">
-              Full Name
-            </label>
+            <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Full Name</label>
             <input
               type="text"
               value={name}
@@ -103,9 +102,7 @@ export function BookingSummaryPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">
-              Email
-            </label>
+            <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Email</label>
             <input
               type="email"
               value={email}
@@ -115,9 +112,7 @@ export function BookingSummaryPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">
-              Phone
-            </label>
+            <label className="block text-sm font-medium text-slate-600 dark:text-slate-400 mb-1">Phone</label>
             <input
               type="tel"
               value={phone}
@@ -128,9 +123,7 @@ export function BookingSummaryPage() {
             />
           </div>
 
-          <h3 className="font-semibold text-slate-800 dark:text-slate-100 pt-4">
-            Payment Method
-          </h3>
+          <h3 className="font-semibold text-slate-800 dark:text-slate-100 pt-4">Payment Method</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {PAYMENT_OPTIONS.map((opt) => {
               const Icon = opt.icon
@@ -155,8 +148,9 @@ export function BookingSummaryPage() {
           <motion.button
             type="submit"
             disabled={!name || !email || !phone || !paymentMethod || confirming}
-            whileHover={{ scale: confirming ? 1 : 1.02 }}
-            whileTap={{ scale: confirming ? 1 : 0.98 }}
+            whileHover={{ scale: confirming ? 1 : 1.03 }}
+            whileTap={{ scale: confirming ? 1 : 0.97 }}
+            transition={springButton}
             className={`w-full py-3 rounded-xl font-semibold mt-6 ${
               confirming || !name || !email || !phone || !paymentMethod
                 ? 'bg-slate-300 dark:bg-slate-600 cursor-not-allowed'
@@ -173,8 +167,7 @@ export function BookingSummaryPage() {
         animate={{ opacity: 1 }}
         className="mt-6 p-4 rounded-xl bg-slate-100 dark:bg-slate-800 text-sm text-slate-600 dark:text-slate-400"
       >
-        <strong>Email confirmation:</strong> A confirmation will be sent to your email after
-        booking.
+        <strong>Email confirmation:</strong> A confirmation will be sent to your email after booking.
       </motion.div>
     </div>
   )
